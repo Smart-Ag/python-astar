@@ -10,8 +10,8 @@ __license__ = "BSD"
 __version__ = "0.93"
 __maintainer__ = __author__
 __email__ = ''.join(map(chr, [106, 117, 108, 105, 101, 110, 46, 114, 105,
-                              97, 108, 108, 97, 110, 100, 64, 103, 109, 97, 105,
-                              108, 46, 99, 111, 109]))
+                              97, 108, 108, 97, 110, 100, 64, 103, 109, 97,
+                              105, 108, 46, 99, 111, 109]))
 __status__ = "Production"
 
 
@@ -46,21 +46,22 @@ class AStar:
 
     @abstractmethod
     def heuristic_cost_estimate(self, current, goal):
-        """Computes the estimated (rough) distance between a node and the goal, this method
-         must be implemented in a subclass. The second parameter is always the goal."""
+        """Computes the estimated (rough) distance between a node and the goal, this
+        method must be implemented in a subclass. The second parameter is always the goal."""
         raise NotImplementedError
 
     @abstractmethod
     def distance_between(self, n1, n2):
-        """Gives the real distance between two adjacent nodes n1 and n2 (i.e n2 belongs to
-         the list of n1's neighbors). n2 is guaranteed to belong to the list returned by
-         the call to neighbors(n1). This method must be implemented in a subclass."""
+        """Gives the real distance between two adjacent nodes n1 and n2 (i.e n2
+           belongs to the list of n1's neighbors). n2 is guaranteed to belong to the
+           list returned by the call to neighbors(n1). This method must be
+           implemented in a subclass."""
         raise NotImplementedError
 
     @abstractmethod
     def neighbors(self, node):
-        """For a given node, returns (or yields) the list of its neighbors. this method
-         must be implemented in a subclass"""
+        """For a given node, returns (or yields) the list of its neighbors. this
+        method must be implemented in a subclass"""
         raise NotImplementedError
 
     def is_goal_reached(self, current, goal):
