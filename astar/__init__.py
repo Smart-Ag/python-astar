@@ -3,6 +3,7 @@
 
 from abc import ABCMeta, abstractmethod
 from heapq import heappush, heappop, heapify
+import math
 
 __author__ = "Julien Rialland"
 __copyright__ = "Copyright 2012-2017, J.Rialland"
@@ -49,10 +50,12 @@ class AStar:
         raise NotImplementedError
 
     @abstractmethod
-    def distance_between(self, n1, n2):
+    def distance_between(self, n1, n2, a_b4):
         """Gives the real distance between two adjacent nodes n1 and n2 (i.e n2 belongs to the list of n1's neighbors).
            n2 is guaranteed to belong to the list returned by the call to neighbors(n1).
            This method must be implemented in a subclass."""
+
+        # a_b4 is heading going toward n1
         raise NotImplementedError
 
     @abstractmethod
@@ -75,7 +78,7 @@ class AStar:
         else:
             return reversed(list(_gen()))
 
-    def astar(self, start, goal, reversePath=False):
+    def astar(self, start, goal, init_heading, reversePath=False):
         if self.is_goal_reached(start, goal):
             return [start]
         searchNodes = AStar.SearchNodeDict()
@@ -85,6 +88,12 @@ class AStar:
         heappush(openSet, startNode)
         while openSet:
             current = heappop(openSet)
+
+            if current.came_from is None:
+                last_heading = init_heading
+            else:
+                last_heading = self.angle_between(current.data, current.came_from.data)
+
             if self.is_goal_reached(current.data, goal):
                 return self.reconstruct_path(current, reversePath)
             current.out_openset = True
@@ -93,7 +102,7 @@ class AStar:
                 if neighbor.closed:
                     continue
                 tentative_gscore = current.gscore + \
-                    self.distance_between(current.data, neighbor.data)
+                    self.distance_between(current.data, neighbor.data, last_heading)
                 if tentative_gscore >= neighbor.gscore:
                     continue
                 neighbor.came_from = current
@@ -109,23 +118,28 @@ class AStar:
                     heappush(openSet, neighbor)
         return None
 
+    # NOTE: this is not abstract, probably could/should do something differently here
+    @staticmethod
+    def angle_between(node1, node2):
+        return math.atan2((node2.y - node1.y), (node2.x - node1.x))
 
-def find_path(start, goal, neighbors_fnct, reversePath=False, heuristic_cost_estimate_fnct=lambda a, b: Infinite, distance_between_fnct=lambda a, b: 1.0, is_goal_reached_fnct=lambda a, b: a == b):
+
+def find_path(start, goal, init_heading, neighbors_fnct, reversePath=False, heuristic_cost_estimate_fnct=lambda a, b: Infinite, distance_between_fnct=lambda a, b: 1.0, is_goal_reached_fnct=lambda a, b: a == b):
     """A non-class version of the path finding algorithm"""
     class FindPath(AStar):
 
         def heuristic_cost_estimate(self, current, goal):
             return heuristic_cost_estimate_fnct(current, goal)
 
-        def distance_between(self, n1, n2):
-            return distance_between_fnct(n1, n2)
+        def distance_between(self, n1, n2, ang_last):
+            return distance_between_fnct(n1, n2, ang_last)
 
         def neighbors(self, node):
             return neighbors_fnct(node)
 
         def is_goal_reached(self, current, goal):
             return is_goal_reached_fnct(current, goal)
-    return FindPath().astar(start, goal, reversePath)
+    return FindPath().astar(start, goal, init_heading, reversePath)
 
 
 __all__ = ['AStar', 'find_path']
