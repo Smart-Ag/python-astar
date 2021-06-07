@@ -2,8 +2,12 @@
 """ generic A-Star path searching algorithm """
 
 from abc import ABCMeta, abstractmethod
+<<<<<<< HEAD
 from heapq import heappush, heappop, heapify
 import math
+=======
+from heapq import heappush, heappop
+>>>>>>> 335babb92dfebdd9e7019253a508e2677beef3e2
 
 __author__ = "Julien Rialland"
 __copyright__ = "Copyright 2012-2017, J.Rialland"
@@ -11,7 +15,8 @@ __license__ = "BSD"
 __version__ = "0.93"
 __maintainer__ = __author__
 __email__ = ''.join(map(chr, [106, 117, 108, 105, 101, 110, 46, 114, 105,
-                              97, 108, 108, 97, 110, 100, 64, 103, 109, 97, 105, 108, 46, 99, 111, 109]))
+                              97, 108, 108, 97, 110, 100, 64, 103, 109, 97,
+                              105, 108, 46, 99, 111, 109]))
 __status__ = "Production"
 
 
@@ -46,7 +51,8 @@ class AStar:
 
     @abstractmethod
     def heuristic_cost_estimate(self, current, goal):
-        """Computes the estimated (rough) distance between a node and the goal, this method must be implemented in a subclass. The second parameter is always the goal."""
+        """Computes the estimated (rough) distance between a node and the goal, this
+        method must be implemented in a subclass. The second parameter is always the goal."""
         raise NotImplementedError
 
     @abstractmethod
@@ -60,7 +66,8 @@ class AStar:
 
     @abstractmethod
     def neighbors(self, node):
-        """For a given node, returns (or yields) the list of its neighbors. this method must be implemented in a subclass"""
+        """For a given node, returns (or yields) the list of its neighbors. this
+        method must be implemented in a subclass"""
         raise NotImplementedError
 
     def is_goal_reached(self, current, goal):
@@ -124,7 +131,10 @@ class AStar:
         return math.atan2((node2.y - node1.y), (node2.x - node1.x))
 
 
-def find_path(start, goal, init_heading, neighbors_fnct, reversePath=False, heuristic_cost_estimate_fnct=lambda a, b: Infinite, distance_between_fnct=lambda a, b: 1.0, is_goal_reached_fnct=lambda a, b: a == b):
+def find_path(start, goal, init_heading, neighbors_fnct, reversePath=False,
+              heuristic_cost_estimate_fnct=lambda a, b: Infinite,
+              distance_between_fnct=lambda a, b: 1.0,
+              is_goal_reached_fnct=lambda a, b: a == b):
     """A non-class version of the path finding algorithm"""
     class FindPath(AStar):
 
