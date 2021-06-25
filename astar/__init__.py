@@ -2,12 +2,8 @@
 """ generic A-Star path searching algorithm """
 
 from abc import ABCMeta, abstractmethod
-<<<<<<< HEAD
 from heapq import heappush, heappop, heapify
 import math
-=======
-from heapq import heappush, heappop
->>>>>>> 335babb92dfebdd9e7019253a508e2677beef3e2
 
 __author__ = "Julien Rialland"
 __copyright__ = "Copyright 2012-2017, J.Rialland"
