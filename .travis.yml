@@ -8,5 +8,8 @@ python:
 install:
   - pip install pytest coverage coveralls
 
+script:
+  - coverage run --source=astar -m pytest
+
 after_sucess:
   coveralls
