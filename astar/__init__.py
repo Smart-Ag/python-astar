@@ -128,7 +128,7 @@ class AStar:
         try:
             return math.atan2((node2[1] - node1[1]), (node2[0] - node1[0]))
         except:
-            return math.atan2((node2.y - node1.y), (node2.x - node1.x))
+            return math.atan2((node2[1] - node1[1]), (node2[0] - node1[0]))
 
 
 def find_path(start, goal, init_heading, neighbors_fnct, reversePath=False,
